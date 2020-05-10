@@ -4,7 +4,9 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/task_manager"
+
+app.config["MONGO_URI"] = 'mongodb+srv://root:r00tUser@myfirstcluster-owxyk.mongodb.net/task_manager?retryWrites=true&w=majority'
+
 mongo = PyMongo(app)
 
 
@@ -37,10 +39,10 @@ def edit_task(task_id):
 @app.route('/update_task/<task_id>', methods=["POST"])
 def update_task(task_id):
     tasks = mongo.db.tasks
-    tasks.update( {'_id': ObjectId(task_id)},
+    tasks.update({'_id': ObjectId(task_id)},
     {
-        'task_name':request.form.get('task_name'),
-        'category_name':request.form.get('category_name'),
+        'task_name': request.form.get('task_name'),
+        'category_name': request.form.get('category_name'),
         'task_description': request.form.get('task_description'),
         'due_date': request.form.get('due_date'),
         'is_urgent': request.form.get('is_urgent')
@@ -63,8 +65,7 @@ def get_categories():
 @app.route('/edit_category/<category_id>')
 def edit_category(category_id):
     return render_template('editcategory.html',
-                           category=mongo.db.categories.find_one(
-                           {'_id': ObjectId(category_id)}))
+                           category=mongo.db.categories.find_one({'_id': ObjectId(category_id)}))
 
 
 @app.route('/update_category/<category_id>', methods=['POST'])
@@ -95,10 +96,8 @@ def add_category():
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
-                port=int(os.environ.get('PORT')),
-                debug=True)
-
-
+            port=int(os.environ.get('PORT')),
+            debug=True)
 
 
 # if __name__ == '__main__':
